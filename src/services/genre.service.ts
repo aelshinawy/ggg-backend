@@ -1,8 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
 import { Genre, Prisma } from '@prisma/client';
+import { PrismaService } from './prisma.service';
+import { Injectable } from '@nestjs/common';
 
-Injectable();
+export type IgdbGenre = {
+  id: number;
+  created_at: number;
+  name: string;
+  slug: string;
+  updated_at: number;
+  url: string;
+  checksum: string;
+};
+
+@Injectable()
 export class GenreService {
   constructor(private prisma: PrismaService) {
     console.log('Starting GenreService');
@@ -11,7 +21,9 @@ export class GenreService {
   async genre(
     genreWhereUniqueInput: Prisma.GenreWhereUniqueInput,
   ): Promise<Genre | null> {
-    return this.prisma.genre.findUnique({ where: genreWhereUniqueInput });
+    return this.prisma.genre.findUnique({
+      where: genreWhereUniqueInput,
+    });
   }
 
   async genres(params: {
@@ -35,6 +47,12 @@ export class GenreService {
     return this.prisma.genre.create({
       data,
     });
+  }
+
+  async createGenres(
+    data: Array<Prisma.GenreCreateManyInput>,
+  ): Promise<Prisma.BatchPayload> {
+    return await this.prisma.genre.createMany({ data });
   }
 
   async updateGenre(params: {

@@ -12,10 +12,10 @@ datasource db {
 
 model Genre {
   id          Int @default(autoincrement()) @id 
-  igdb_id     Int @unique
+  igdb_id     Int? @unique
   created_at  DateTime @default(now())
-  name        String
-  games Game[]
+  name        String?
+  slug        String?
 }
 
 model Game {
@@ -24,5 +24,4 @@ model Game {
   igdb_id     Int @unique
   release_date  DateTime
   name String
-  genres Genre[]
 }
